@@ -10,8 +10,9 @@ app.get('/bellaudio', function(req, res) {
     res.sendFile(__dirname + '/doorbell.mp3');
 });
 
-app.post('/ringBell', function() {
+app.post('/ringBell', function(req, res) {
     io.emit("ring bell");
+    res.sendStatus(200);
 })
 
 io.on("connection", function(socket) {
