@@ -1,6 +1,8 @@
 let app = require('express')();
 let http = require('http').Server(app);
 let io = require('socket.io')(http);
+let bodyParser = require('body-parser');
+let urlEncodedParser = bodyParser.urlencoded({extended: false});
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
@@ -10,9 +12,12 @@ app.get('/bellaudio', function(req, res) {
     res.sendFile(__dirname + '/doorbell.mp3');
 });
 
-app.post('/ringBell', function(req, res) {
+app.post('/ringBell', urlEncodedParser, function(req, res) {
     io.emit("ring bell");
-    res.sendStatus(200);
+    res.send({
+        "response_type": "in_channel",
+        "text": `${req.body.user_name} rang the doorbell!`
+    })
 })
 
 io.on("connection", function(socket) {
