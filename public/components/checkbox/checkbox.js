@@ -13,6 +13,7 @@ var toggleCheckbox = function(el, callback) {
             verify.classList.remove("disappearing--reset");
         }
         verify.addEventListener("transitionend", innerListener, false)
+        
     };
     verify.addEventListener("transitionend", listener, false)
 }

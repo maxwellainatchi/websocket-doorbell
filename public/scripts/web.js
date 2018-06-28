@@ -45,6 +45,7 @@ var emitRing = function() {
 var toggleBellMode = function() {
     let bellModeToggle = document.getElementById("bellModeToggle");
     bellMode = bellModeToggle.checked;
+    setCookie("bellMode", bellMode);
 
     if (bellMode && Notification && Notification.permission !== "granted") {
         Notification.requestPermission();
@@ -59,6 +60,15 @@ function notifyBell() {
             icon: notificationFullIcon,
             body: "Someone just rang the doorbell!",
         });
+    }
+}
+
+window.onload = function() {
+    bellMode = getCookie("bellMode") === "true" ? true : false;
+    document.getElementById("bellModeToggle").checked = bellMode;
+
+    if (bellMode && Notification && Notification.permission !== "granted") {
+        Notification.requestPermission();
     }
 }
 
