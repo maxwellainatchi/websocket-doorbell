@@ -1,26 +1,7 @@
 <html>
     <head>
         <script src="/socket.io/socket.io.js"></script>
-        <script>
-            var socket = io();
-            var bellMode = false;
-            var ring = function() {
-                console.log("Ring");
-                socket.emit("ring");
-            }
-            var emitRing = function() {
-                if (!bellMode) { return; }
-                console.log("Bell Ring");
-                let audio = document.getElementById("bellAudio");
-                setTimeout(function() {
-                    audio.pause();
-                }, 3000);
-                audio.pause();
-                audio.play();
-            }
-
-            socket.on("ring bell", emitRing);
-        </script>
+        <script src="/scripts/web.js"></script>
         <style>
             .outer {
                 display: table;
@@ -51,7 +32,7 @@
             </div>
         </div>
         <audio id="bellAudio">
-            <source src="/bellAudio" type="audio/mp3"/>
+            <source src="/audio/doorbell.mp3" type="audio/mp3"/>
         </audio>
     </body>
 </html>

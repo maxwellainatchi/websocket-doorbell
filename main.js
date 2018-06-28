@@ -1,15 +1,14 @@
-let app = require('express')();
+let Express = require('express');
+let app = Express();
 let http = require('http').Server(app);
 let io = require('socket.io')(http);
 let bodyParser = require('body-parser');
 let urlEncodedParser = bodyParser.urlencoded({extended: false});
 
-app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
-});
+app.use(Express.static(__dirname + "/public"));
 
-app.get('/bellaudio', function(req, res) {
-    res.sendFile(__dirname + '/doorbell.mp3');
+app.get('/', function(req, res){
+    res.sendFile(__dirname + '/index.html');
 });
 
 app.post('/ringBell', urlEncodedParser, function(req, res) {
