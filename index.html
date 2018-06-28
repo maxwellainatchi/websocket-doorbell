@@ -1,36 +1,25 @@
 <html>
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="/socket.io/socket.io.js"></script>
         <script src="/scripts/web.js"></script>
-        <style>
-            .outer {
-                display: table;
-                position: absolute;
-                height: 100%;
-                width: 100%;
-            }
-
-            .middle {
-                display: table-cell;
-                vertical-align: middle;
-            }
-
-            .inner {
-                margin-left: auto;
-                margin-right: auto;
-                width: 100%;
-            }
-        </style>
+        <script src="/components/checkbox/checkbox.js"></script>
+        <link rel="stylesheet" href="/components/checkbox/checkbox.css" />
+        <link rel="stylesheet" href="/styles/button.css" />
+        <link rel="stylesheet" href="/styles/main.css" />
     </head>
     <body>
-        <input type="checkbox" id="bellModeToggle" onchange="toggleBellMode()">Toggle Bell Mode</button>
-        <div class="outer">
-            <div class="middle">
-                <div class="inner">
-                    <button style="width: 100%; height: 60vh;" onclick="ring()">Ring Bell</button>
-                </div>
+        <main>
+            <h1 style="text-align: center">Doorbell</h1>
+            <button class="prettyButton" style="width: 100%; height: 60vh;" onclick="ring()">Ring Bell</button>
+            <div class="options">
+                <label class="checkboxContainer spaced">Toggle Bell Mode
+                    <input type="checkbox" id="bellModeToggle" onchange="toggleCheckbox(this, toggleBellMode)">
+                    <span class="checkmark"></span>
+                    <span class="verifyText"></span>
+                </label>
             </div>
-        </div>
+        </main>
         <audio id="bellAudio">
             <source src="/audio/doorbell.mp3" type="audio/mp3"/>
         </audio>
