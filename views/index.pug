@@ -1,31 +1,29 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="/scripts/cookiestore.js"></script>
-        <script src="/scripts/web.js"></script>
-        <script src="/components/checkbox/checkbox.js"></script>
-        <link rel="shortcut icon" id="dynamic-favicon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAQAAABLCVATAAAAsklEQVR4AezUpwECURRE0fv6gAagAhyOYrCgWbueTFfkEli3kpxz/IkMZ/yVw2+LLIY7X2Yyw8dRTGbrEcdJchdKYi1KgWAXCigQxUKagcyOx4A0hjIyuzyyGEgwuRqakECT0JXZ9dFF0JKS2e2RQktVGaqhpaEMNdESKkMhOmSm3j/0DynktEKe/g8pRsY9o07JzGxc5RnuFXrzwb3xgjKD2uEGdVDqpjqGl0DYyDByAQBSWI79pT9USAAAAABJRU5ErkJggg==">
-        <link rel="stylesheet" href="/components/checkbox/checkbox.css" />
-        <link rel="stylesheet" href="/styles/button.css" />
-        <link rel="stylesheet" href="/styles/main.css" />
-    </head>
-    <body>
-        <main>
-            <h1 style="text-align: center">Doorbell</h1>
-            <button class="prettyButton" style="width: 100%; height: 60vh;" onclick="ring()">Ring Bell</button>
-            <div class="options">
-                <label class="checkboxContainer spaced">I am <b>BELL</b>.
-                    <input type="checkbox" id="bellModeToggle" onchange="toggleCheckbox(this, toggleBellMode)">
-                    <span class="checkmark"></span>
-                    <span class="verifyText"></span>
-                </label>
-            </div>
-        </main>
-        <audio id="bellAudio">
-            source(src=baseURL + "/audio/doorbell.wav" type="audio/wav")
-            source(src=baseURL + "/audio/doorbell.mp3" type="audio/mp3")
-        </audio>
-    </body>
+doctype html
+
+include ../public/components/checkbox/checkbox.pug
+
+<html lang="en">
+head
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    link#dynamic-favicon(rel="shortcut icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAQAAABLCVATAAAAsklEQVR4AezUpwECURRE0fv6gAagAhyOYrCgWbueTFfkEli3kpxz/IkMZ/yVw2+LLIY7X2Yyw8dRTGbrEcdJchdKYi1KgWAXCigQxUKagcyOx4A0hjIyuzyyGEgwuRqakECT0JXZ9dFF0JKS2e2RQktVGaqhpaEMNdESKkMhOmSm3j/0DynktEKe/g8pRsY9o07JzGxc5RnuFXrzwb3xgjKD2uEGdVDqpjqGl0DYyDByAQBSWI79pT9USAAAAABJRU5ErkJggg==")
+    link(rel="apple-touch-icon-precomposed" sizes="57x57" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAQAAABLCVATAAAAsklEQVR4AezUpwECURRE0fv6gAagAhyOYrCgWbueTFfkEli3kpxz/IkMZ/yVw2+LLIY7X2Yyw8dRTGbrEcdJchdKYi1KgWAXCigQxUKagcyOx4A0hjIyuzyyGEgwuRqakECT0JXZ9dFF0JKS2e2RQktVGaqhpaEMNdESKkMhOmSm3j/0DynktEKe/g8pRsY9o07JzGxc5RnuFXrzwb3xgjKD2uEGdVDqpjqGl0DYyDByAQBSWI79pT9USAAAAABJRU5ErkJggg==")
+
+    
+    script(src="/socket.io/socket.io.js")
+    script(src="/scripts/cookiestore.js")
+    script(src="/components/checkbox/checkbox.js")
+    script(src="/scripts/web.js")
+
+    link(rel="stylesheet" href="/styles/button.css")
+    link(rel="stylesheet" href="/components/checkbox/checkbox.css")
+    link(rel="stylesheet" href="/styles/main.css")
+body
+    main
+        h1(style="text-align: center") Doorbell
+        button.prettyButton(style="width: 100%; height: 60vh;" onclick="ring()") Ring Bell
+        .options
+            +checkbox("I am <b>BELL</b>")(onchange="toggleBellMode")
+    audio#bellAudio
+        source(src="/audio/doorbell.wav" type="audio/wav")
+        source(src="/audio/doorbell.mp3" type="audio/mp3")
 </html>

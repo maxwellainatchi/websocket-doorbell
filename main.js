@@ -8,15 +8,8 @@ let urlEncodedParser = bodyParser.urlencoded({extended: false});
 app.use(Express.static(__dirname + "/public"));
 app.set('view engine', "pug");
 
-let baseURL;
-if (process.env.PORT) {
-    baseURL = "https://tenebris-lab-doorbell.herokuapp.com/"
-} else {
-    baseURL = "http://localhost:3000";
-}
-
 app.get('/', function(req, res){
-    res.render('index', { baseURL });
+    res.render('index');
 });
 
 app.post('/ringBell', urlEncodedParser, function(req, res) {

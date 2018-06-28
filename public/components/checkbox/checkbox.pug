@@ -1,0 +1,5 @@
+mixin checkbox(text)
+    label.checkboxContainer.spaced!=text
+        input#bellModeToggle(type="checkbox" onchange=`toggleCheckbox(this, ${attributes.onchange})`)
+        span.checkmark
+        span.verifyText
