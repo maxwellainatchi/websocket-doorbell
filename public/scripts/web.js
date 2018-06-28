@@ -32,13 +32,34 @@ var emitRing = function() {
     if (!bellMode) { return; }
     console.log("Bell Ring");
     let audio = document.getElementById("bellAudio");
-    changeFavicon(notificationFullIcon);
+    audio.pause();
     setTimeout(function() {
         changeFavicon(notificationEmptyIcon);
         audio.pause();
     }, 3000);
-    audio.pause();
     audio.play();
+    changeFavicon(notificationFullIcon);
+    notifyBell();
+}
+
+var toggleBellMode = function() {
+    let bellModeToggle = document.getElementById("bellModeToggle");
+    bellMode = bellModeToggle.checked;
+
+    if (bellMode && Notification && Notification.permission !== "granted") {
+        Notification.requestPermission();
+    }
+}
+  
+function notifyBell() {
+    if (Notification.permission !== "granted") {
+        Notification.requestPermission();
+    } else {
+        var notification = new Notification('Doorbell', {
+            icon: notificationFullIcon,
+            body: "Someone just rang the doorbell!",
+        });
+    }
 }
 
 socket.on("ring bell", emitRing);
