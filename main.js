@@ -6,9 +6,17 @@ let bodyParser = require('body-parser');
 let urlEncodedParser = bodyParser.urlencoded({extended: false});
 
 app.use(Express.static(__dirname + "/public"));
+app.set('view engine', "pug");
+
+let baseURL;
+if (process.env.PORT) {
+    baseURL = "https://tenebris-lab-doorbell.herokuapp.com/"
+} else {
+    baseURL = "http://localhost:3000";
+}
 
 app.get('/', function(req, res){
-    res.sendFile(__dirname + '/index.html');
+    res.render('index', { baseURL });
 });
 
 app.post('/ringBell', urlEncodedParser, function(req, res) {

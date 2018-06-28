@@ -33,11 +33,11 @@ var emitRing = function() {
     console.log("Bell Ring");
     let audio = document.getElementById("bellAudio");
     audio.pause();
+    audio.play();
     setTimeout(function() {
         changeFavicon(notificationEmptyIcon);
         audio.pause();
     }, 3000);
-    audio.play();
     changeFavicon(notificationFullIcon);
     notifyBell();
 }
