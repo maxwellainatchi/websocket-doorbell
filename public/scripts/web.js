@@ -28,17 +28,17 @@ var ring = function() {
     console.log("Ring");
     socket.emit("ring");
 }
+
 var emitRing = function() {
     if (!bellMode) { return; }
     console.log("Bell Ring");
     let audio = document.getElementById("bellAudio");
-    audio.pause();
+    if (!audio.paused) { audio.currentTime = 0; }
     audio.play();
+    changeFavicon(notificationFullIcon);
     setTimeout(function() {
         changeFavicon(notificationEmptyIcon);
-        audio.pause();
-    }, 3000);
-    changeFavicon(notificationFullIcon);
+    }, 4000);
     notifyBell();
 }
 
