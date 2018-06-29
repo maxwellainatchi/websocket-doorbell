@@ -26,12 +26,12 @@ function changeFavicon(src) {
 
 var ring = function() {
     console.log("Ring");
-    socket.emit("ring");
+    socket.emit("ring", { name });
 }
 
-var emitRing = function() {
+var emitRing = function({ name }) {
     if (!bellMode) { return; }
-    console.log("Bell Ring");
+    console.log("Bell Ring by " + name);
     let audio = document.getElementById("bellAudio");
     if (!audio.paused) { audio.currentTime = 0; }
     audio.play();
@@ -39,27 +39,40 @@ var emitRing = function() {
     setTimeout(function() {
         changeFavicon(notificationEmptyIcon);
     }, 4000);
-    notifyBell();
+    notifyBell(name);
+    document.getElementById("lastRang").innerHTML = `${name} is a dead ringer.<br /> @${new Date().toLocaleTimeString()}`;
 }
 
 var toggleBellMode = function() {
     let bellModeToggle = document.getElementById("bellModeToggle");
     bellMode = bellModeToggle.checked;
     setCookie("bellMode", bellMode);
+    document.getElementById("lastRang").style.display = bellMode ? "block" : "none";
 
     if (bellMode && Notification && Notification.permission !== "granted") {
         Notification.requestPermission();
     }
 }
   
-function notifyBell() {
+function notifyBell(name) {
     if (Notification.permission !== "granted") {
         Notification.requestPermission();
     } else {
         var notification = new Notification('Doorbell', {
             icon: notificationFullIcon,
-            body: "Someone just rang the doorbell!",
+            body: `${name} just rang the doorbell!`,
         });
+    }
+}
+
+function addName() {
+    let nameInput = document.getElementById("nameInput");
+    name = nameInput.value;
+    console.log(nameInput.value);
+    if (name) {
+        setCookie("person_name", name);
+        document.getElementById("nameOverlay").style.display = "none";
+        document.getElementById("name").innerHTML = name;
     }
 }
 
@@ -70,6 +83,14 @@ window.onload = function() {
     if (bellMode && Notification && Notification.permission !== "granted") {
         Notification.requestPermission();
     }
+
+    var name = getCookie("person_name");
+    if (!name) {
+        document.getElementById("nameOverlay").style.display = "block";
+    } else {
+        document.getElementById("name").innerHTML = name;
+    }
+    document.getElementById('loadingOverlay').style.display = "none";
 }
 
 socket.on("ring bell", emitRing);

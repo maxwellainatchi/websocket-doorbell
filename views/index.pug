@@ -15,14 +15,23 @@ head
     script(src="/scripts/web.js")
 
     link(rel="stylesheet" href="/styles/button.css")
+    link(rel="stylesheet" href="/styles/prettyInput.css")
     link(rel="stylesheet" href="/components/checkbox/checkbox.css")
     link(rel="stylesheet" href="/styles/main.css")
 body
+    .overlay#loadingOverlay Loading...
+    .overlay#nameOverlay(style={ display: "none" })
+        .padded.centered
+            label(for="nameInput") Enta name heeere:
+            input#nameInput.prettyInput.spaced(name="nameInput" type="text", placeholder="name." style={ width: "100%" })
+            button#nameSubmitButton.prettyButton.spaced(onclick="addName()" style={ width: "100%" }) Lesgo.
     main
         h1(style="text-align: center") Doorbell
+        h2#name(style="text-align: center")
         button.prettyButton(style="width: 100%; height: 60vh;" onclick="ring()") Ring Bell
         .options
             +checkbox("I am <b>BELL</b>")(onchange="toggleBellMode")
+        #lastRang(style="text-align: center;")
     audio#bellAudio
         source(src="/audio/doorbell.wav" type="audio/wav")
         source(src="/audio/doorbell.mp3" type="audio/mp3")

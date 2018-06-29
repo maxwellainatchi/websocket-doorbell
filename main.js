@@ -13,7 +13,7 @@ app.get('/', function(req, res){
 });
 
 app.post('/ringBell', urlEncodedParser, function(req, res) {
-    io.emit("ring bell");
+    io.emit("ring bell", { name: req.body.user_name });
     res.send({
         "response_type": "in_channel",
         "text": `${req.body.user_name} rang the doorbell!`
@@ -21,9 +21,9 @@ app.post('/ringBell', urlEncodedParser, function(req, res) {
 })
 
 io.on("connection", function(socket) {
-    socket.on('ring', function(socket){
-        io.emit("ring bell");
-        console.log("RING");
+    socket.on('ring', function({ name }){
+        io.emit("ring bell", { name });
+        console.log(`${name} rang`);
     });
 });
 
