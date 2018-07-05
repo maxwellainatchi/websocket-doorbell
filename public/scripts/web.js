@@ -32,14 +32,28 @@ var ring = function() {
 var emitRing = function({ name }) {
     if (!bellMode) { return; }
     console.log("Bell Ring by " + name);
+
+    // Play audio
     let audio = document.getElementById("bellAudio");
     if (!audio.paused) { audio.currentTime = 0; }
     audio.play();
+    audio.onended = () => {
+         // TTS
+        let msg = new SpeechSynthesisUtterance(name + " has arrived")
+        window.speechSynthesis.speak(msg)
+    };
+
+    // Change favicon
     changeFavicon(notificationFullIcon);
     setTimeout(function() {
         changeFavicon(notificationEmptyIcon);
     }, 4000);
+
+    // Send desktop notification
     notifyBell(name);
+
+   
+
     document.getElementById("lastRang").innerHTML = `${name} is a dead ringer.<br /> @${new Date().toLocaleTimeString()}`;
 }
 
