@@ -8,7 +8,21 @@ let urlEncodedParser = bodyParser.urlencoded({extended: false});
 app.use(Express.static(__dirname + "/public"));
 app.set('view engine', "pug");
 
-app.get('/', function(req, res){
+app.get('/reloader', function(req, res, next) {
+    if (req.query.password === "maxisthebest") {
+        res.render('reloader');
+    } else {
+        next();
+    }
+});
+
+app.post("/reload", urlEncodedParser, function(req, res, next) {
+    io.emit("reload", req.body)
+    console.log("reloading", req.body)
+    res.redirect("/reloader?password=maxisthebest#reloaded");
+})
+
+app.use(function(req, res) {
     res.render('index');
 });
 

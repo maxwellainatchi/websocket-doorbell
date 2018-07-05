@@ -72,7 +72,7 @@ function notifyBell(name) {
     if (Notification.permission !== "granted") {
         Notification.requestPermission();
     } else {
-        var notification = new Notification('Doorbell', {
+        var notification = new Notification('Doorbell rang', {
             icon: notificationFullIcon,
             body: `${name} just rang the doorbell!`,
         });
@@ -108,4 +108,21 @@ window.onload = function() {
 }
 
 socket.on("ring bell", emitRing);
+socket.on("reload", options => {
+    options = options || {}
+    if (options.onlyListeners) {
+        if (!this.bellMode) { return }
+    }
+    if (options.reason && Notification && Notification.permission === "granted") {
+        let title = "Doorbell reload"
+        if (options.shortReason) {
+            title += ": " + options.shortReason
+        }
+        var notification = new Notification(title, {
+            icon: notificationFullIcon,
+            body: options.reason,
+        });
+    }
+    location.reload(true)
+})
 changeFavicon(notificationEmptyIcon);
