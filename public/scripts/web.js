@@ -29,7 +29,7 @@ var ring = function() {
     socket.emit("ring", { name });
 }
 
-var emitRing = function({ name }) {
+var emitRing = function({ name, icon }) {
     if (!bellMode) { return; }
     console.log("Bell Ring by " + name);
 
@@ -50,7 +50,7 @@ var emitRing = function({ name }) {
     }, 4000);
 
     // Send desktop notification
-    notifyBell(name);
+    notifyBell(name, icon);
 
    
 
@@ -68,12 +68,12 @@ var toggleBellMode = function() {
     }
 }
   
-function notifyBell(name) {
+function notifyBell(name, icon) {
     if (Notification.permission !== "granted") {
         Notification.requestPermission();
     } else {
         var notification = new Notification('Doorbell rang', {
-            icon: notificationFullIcon,
+            icon: icon || notificationFullIcon,
             body: `${name} just rang the doorbell!`,
         });
     }
@@ -121,6 +121,7 @@ socket.on("reload", options => {
         var notification = new Notification(title, {
             icon: notificationFullIcon,
             body: options.reason,
+            requireAction: true
         });
     }
     location.reload(true)
