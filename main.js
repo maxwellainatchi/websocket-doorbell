@@ -4,6 +4,8 @@ let http = require('http').Server(app);
 let io = require('socket.io')(http);
 let bodyParser = require('body-parser');
 let urlEncodedParser = bodyParser.urlencoded({extended: false});
+let superagent = require("superagent")
+let slackToken = "xoxp-388050947686-387414541509-388148942546-fdb8483697f57a009aa125b46e3b9dba"
 
 app.use(Express.static(__dirname + "/public"));
 app.set('view engine', "pug");
@@ -22,17 +24,20 @@ app.post("/reload", urlEncodedParser, function(req, res, next) {
     res.redirect("/reloader?password=maxisthebest#reloaded");
 })
 
+app.post('/ringBell', urlEncodedParser, async function(req, res) {
+    let data = await superagent.get(`https://slack.com/api/users.info?token=${slackToken}&user=${req.body.user_id}`)
+    let user = data.body.user
+    console.log(user.real_name + " rang from slack")
+    io.emit("ring bell", { name: user.real_name });
+    res.send({
+        "response_type": "in_channel",
+        "text": `${user.real_name} rang the doorbell!`
+    })
+})
+
 app.use(function(req, res) {
     res.render('index');
 });
-
-app.post('/ringBell', urlEncodedParser, function(req, res) {
-    io.emit("ring bell", { name: req.body.user_name });
-    res.send({
-        "response_type": "in_channel",
-        "text": `${req.body.user_name} rang the doorbell!`
-    })
-})
 
 io.on("connection", function(socket) {
     socket.on('ring', function({ name }){

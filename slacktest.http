@@ -1,0 +1,5 @@
+# POST
+POST http://localhost:3000/ringBell HTTP/1.1
+content-type: application/x-www-form-urlencoded
+
+user_id=UBDC6FXEZ
