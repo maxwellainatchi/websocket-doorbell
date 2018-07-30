@@ -5,10 +5,27 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
+			"type": "chrome",
+			"request": "launch",
+			"name": "Client",
+			"url": "http://localhost:3000",
+			"webRoot": "${workspaceFolder}/public/scripts",
+			"internalConsoleOptions": "openOnFirstSessionStart"
+		},
+		{
 			"type": "node",
 			"request": "launch",
-			"name": "Launch Program",
-			"program": "${workspaceFolder}/main.js"
+			"name": "Server",
+			"program": "${workspaceFolder}/main.js",
+			"env": {
+				"RELOAD_PASSWORD": "maxisthebest"
+			}
+		},
+	],
+	"compounds": [
+		{
+			"name": "Launch and open client",
+			"configurations": ["Server", "Client"]
 		}
 	]
 }

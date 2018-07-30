@@ -4,14 +4,15 @@ let http = require('http').Server(app);
 let io = require('socket.io')(http);
 let bodyParser = require('body-parser');
 let urlEncodedParser = bodyParser.urlencoded({extended: false});
-let superagent = require("superagent")
-let slackToken = "xoxp-388050947686-387414541509-388148942546-fdb8483697f57a009aa125b46e3b9dba"
+let superagent = require("superagent");
+let slackToken = process.env.SLACK_TOKEN;
+let reloadPassword = process.env.RELOAD_PASSWORD;
 
 app.use(Express.static(__dirname + "/public"));
 app.set('view engine', "pug");
 
 app.get('/reloader', function(req, res, next) {
-    if (req.query.password === "maxisthebest") {
+    if (req.query.password === reloadPassword) {
         res.render('reloader');
     } else {
         next();
@@ -21,7 +22,7 @@ app.get('/reloader', function(req, res, next) {
 app.post("/reload", urlEncodedParser, function(req, res, next) {
     io.emit("reload", req.body)
     console.log("reloading", req.body)
-    res.redirect("/reloader?password=maxisthebest#reloaded");
+    res.render("reloader", { reloaded: true });
 })
 
 app.post('/ringBell', urlEncodedParser, async function(req, res) {

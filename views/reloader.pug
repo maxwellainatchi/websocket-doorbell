@@ -17,7 +17,8 @@ head
 body
 	main
 		h1(style="text-align: center") Doorbell reloader
-		h2(style="text-align: center")#doneText
+		if reloaded
+			h2(style="text-align: center") Reloaded!
 		form(action="/reload" method="POST")
 			input.prettyButton(type="submit", value="Reload!" style="width: 100%; height: 60vh;")
 			label.spaced Short Reason: 
@@ -26,10 +27,4 @@ body
 			label.spaced Long Reason: 
 			input.prettyInput(name="reason")
 			+checkbox("Only Listeners")(name="onlyListeners")
-
-	script.
-		if (location.hash === "#reloaded") {
-			document.getElementById("doneText").innerHTML = "Reloaded!"
-			location.hash = ""
-		}
 </html>
