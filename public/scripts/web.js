@@ -100,7 +100,7 @@ window.onload = function() {
 
     var name = getCookie("person_name");
     if (!name) {
-        document.getElementById("nameOverlay").style.display = "block";
+        document.getElementById("nameOverlay").classList.remove("hidden")
     } else {
         document.getElementById("name").innerHTML = name;
     }
