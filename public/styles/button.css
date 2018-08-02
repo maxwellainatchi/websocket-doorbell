@@ -1,15 +1,19 @@
-.prettyButton {
+.pretty-button {
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
     background-color: white;
     color: black;
     border: 2px solid rgb(73, 73, 73);
     border-radius: 10px;
-    font-size: 48px;
     outline: none;
 }
 
-.prettyButton:hover {
-    background-color: rgb(73, 73, 73);
-    color: white;
+.pretty-button--large {
+    font-size: 48px;
+}
+
+.pretty-button:hover {
+    background-color: rgb(73, 73, 73) !important;
+    color: white !important;
+    border-color: black !important;
 }

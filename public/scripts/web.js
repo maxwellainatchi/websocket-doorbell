@@ -24,6 +24,49 @@ function changeFavicon(src) {
     document.head.appendChild(link);
 }
 
+function setVisibleEl(el, visible, options, cb) {
+    if (typeof el === "string") {
+        el = document.querySelector(el);
+    }
+    if (typeof options === "function") {
+        cb = options;
+        options = {};
+    }
+    options = options || {};
+    if (options.instant) {
+        if (!visible) {
+            el.classList.add("hidden");
+        } else {
+            el.classList.remove("hidden");
+        }
+        if (cb) cb();
+    } else if (!visible) {
+        hideEl(el, cb);
+    } else {
+        showEl(el, cb);
+    }
+}
+
+function hideEl(el, cb) {
+    el.classList.add("hide");
+    setTimeout(() => {
+        el.classList.add("hidden");
+        setTimeout(() => {
+            el.classList.remove("hide");
+            if (cb) cb();
+        }, 100);
+    }, 1000);
+}
+
+function showEl(el, cb) {
+    el.classList.remove("hidden");
+    el.classList.add("show");
+    setTimeout(() => {
+        el.classList.remove("show");
+        if (cb) cb();
+    }, 1000);
+}
+
 var ring = function() {
     console.log("Ring");
     socket.emit("ring", { name });
@@ -82,11 +125,27 @@ function notifyBell(name, icon) {
 function addName() {
     let nameInput = document.getElementById("nameInput");
     name = nameInput.value;
-    console.log(nameInput.value);
     if (name) {
         setCookie("person_name", name);
-        document.getElementById("nameOverlay").style.display = "none";
         document.getElementById("name").innerHTML = name;
+        setVisibleEl("#nameOverlay", false);
+        setVisibleEl("#overlay", false);
+    }
+}
+
+function changeName() {
+    document.getElementById("nameInput").value = name;
+    setVisibleEl("#nameOverlay", true);
+    setVisibleEl("#overlay", true);
+}
+
+function passClickToChild(el) {
+    let children = el.children;
+    for (let c in children) {
+        if (!children[c].classList.contains("hidden")) {
+            children[c].click();
+            return;
+        }
     }
 }
 
@@ -99,12 +158,15 @@ window.onload = function() {
     }
 
     var name = getCookie("person_name");
-    if (!name) {
-        document.getElementById("nameOverlay").classList.remove("hidden")
-    } else {
+    if (name) {
         document.getElementById("name").innerHTML = name;
+        setVisibleEl("#loadingOverlay", false);
+        setVisibleEl("#overlay", false);
+    } else {
+        setVisibleEl("#loadingOverlay", false, () => {
+            setVisibleEl("#nameOverlay", true);
+        });
     }
-    document.getElementById('loadingOverlay').style.display = "none";
 }
 
 socket.on("ring bell", emitRing);

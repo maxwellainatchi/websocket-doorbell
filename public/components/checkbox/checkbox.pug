@@ -1,3 +1,9 @@
+script
+    include ./checkbox.js
+
+style
+    include ./checkbox.css
+
 mixin checkbox(text)
     label.checkboxContainer.spaced!=text
         input#bellModeToggle(type="checkbox" onchange=`toggleCheckbox(this, ${attributes.onchange})`)

@@ -1,8 +1,6 @@
 doctype html
 
-include ../public/components/checkbox/checkbox.pug
-
-<html lang="en">
+<html class="no-scroll" lang="en">
 head
     meta(name="viewport" content="width=device-width, initial-scale=1")
     link#dynamic-favicon(rel="shortcut icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAQAAABLCVATAAAAsklEQVR4AezUpwECURRE0fv6gAagAhyOYrCgWbueTFfkEli3kpxz/IkMZ/yVw2+LLIY7X2Yyw8dRTGbrEcdJchdKYi1KgWAXCigQxUKagcyOx4A0hjIyuzyyGEgwuRqakECT0JXZ9dFF0JKS2e2RQktVGaqhpaEMNdESKkMhOmSm3j/0DynktEKe/g8pRsY9o07JzGxc5RnuFXrzwb3xgjKD2uEGdVDqpjqGl0DYyDByAQBSWI79pT9USAAAAABJRU5ErkJggg==")
@@ -12,28 +10,35 @@ head
     
     script(src="/socket.io/socket.io.js")
     script(src="/scripts/cookiestore.js")
-    script(src="/components/checkbox/checkbox.js")
     script(src="/scripts/web.js")
 
+    link(rel="stylesheet" href="/styles/reset.css")
+    link(rel="stylesheet" href="/styles/main.css")
+    link(rel="stylesheet" href="/styles/helpers.css")
     link(rel="stylesheet" href="/styles/button.css")
     link(rel="stylesheet" href="/styles/prettyInput.css")
-    link(rel="stylesheet" href="/components/checkbox/checkbox.css")
-    link(rel="stylesheet" href="/styles/main.css")
+
+    include ../public/components/checkbox/checkbox.pug
+    include ../public/components/spinner/spinner.pug
 body
-    .overlay#loadingOverlay Loading...
-    .overlay#nameOverlay.container.centered.padded.hidden
-        .guttered.centered.container.container--column(style="margin: auto")
+    #overlay.container(onclick="passClickToChild(this)")
+        #loadingOverlay.container.full-size(style="justify-content: center; align-items: center;")
+            +spinner
+        form#nameOverlay.padded.guttered.centered.container.container--column.hidden(
+            style="justify-content: center" onsubmit="addName(); return false" onclick="addName()"
+        )
             label(for="nameInput") Enta name heeere:
             input#nameInput.prettyInput.spaced(name="nameInput" type="text", placeholder="name.")
-            button#nameSubmitButton.prettyButton.spaced(onclick="addName()") Lesgo.
-    .container.container--column
-        main.guttered.centered.container.container--column
-            h1(style="text-align: center") Doorbell
-            h2#name(style="text-align: center")
-            button.prettyButton(style="width: 100%; height: 60vh;" onclick="ring()") Ring Bell
-            .options
-                +checkbox("I am <b>BELL</b>")(onchange="toggleBellMode")
-            #lastRang(style="text-align: center;")
+            button#nameSubmitButton.pretty-button.spaced(type="submit"): h1 Lesgo.
+    main.container.container--column.padded
+        h1(style="text-align: center") Doorbell
+        .container(style="justify-content: center; align-items: center")
+            h4#name(style="margin: 10px")
+            button.pretty-button(onclick="changeName()") Change
+        button.pretty-button(style="height: 60vh;" onclick="ring()"): h1 Ring Bell
+        .options
+            +checkbox("I am <b>BELL</b>")(onchange="toggleBellMode")
+        #lastRang(style="text-align: center;")
     audio#bellAudio
         source(src="/audio/doorbell.wav" type="audio/wav")
         source(src="/audio/doorbell.mp3" type="audio/mp3")
