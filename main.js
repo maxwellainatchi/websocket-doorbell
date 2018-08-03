@@ -11,6 +11,12 @@ let reloadPassword = process.env.RELOAD_PASSWORD;
 app.use(Express.static(__dirname + "/public"));
 app.set('view engine', "pug");
 
+app.use((req, res, next) => {
+    let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    console.log(`HTTP ${req.httpVersion} ${req.method} ${req.originalUrl} from ${ip}`);
+    next();
+})
+
 app.get('/reloader', function(req, res, next) {
     if (req.query.password === reloadPassword) {
         res.render('reloader');
@@ -47,8 +53,35 @@ io.on("connection", function(socket) {
     });
 });
 
-let port = process.env.PORT || 3000;
-http.listen(port, function(){
-    console.log('listening on *:3000');
-});
-    
+let port = process.env.PORT;
+let defaultPort = process.env.DEFAULT_PORT || 3000;
+let listener = () => {
+    console.log("listening on *:" + port);
+}
+if (port) {
+    http.listen(port, listener);
+    http.on('error', e => {
+        if (e.code === 'EADDRINUSE') {
+            console.log('Address in use, retrying...');
+            setTimeout(() => {
+                server.close();
+                server.listen(port, listener);
+            }, 1000);
+        } else {
+            throw e;
+        }
+    });
+} else {
+    port = defaultPort;
+    http.listen(port, listener);
+    http.on('error', e => {
+        if (e.code === "EADDRINUSE") {
+            http.listen(0, () => {
+                port = http.address().port;
+                listener();
+            });
+        } else {
+            throw e;
+        }
+    })
+}
