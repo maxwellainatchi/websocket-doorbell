@@ -38,7 +38,7 @@ body
         button.pretty-button(style="height: 60vh;" onclick="ring()"): h1 Ring Bell
         .options
             +checkbox("I am <b>BELL</b>")(onchange="toggleBellMode")
-        #lastRang(style="text-align: center;")
+        #lastRang.hidden(style="text-align: center;")
     audio#bellAudio
         source(src="/audio/doorbell.wav" type="audio/wav")
         source(src="/audio/doorbell.mp3" type="audio/mp3")

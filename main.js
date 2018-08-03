@@ -35,7 +35,7 @@ app.post('/ringBell', urlEncodedParser, async function(req, res) {
     let data = await superagent.get(`https://slack.com/api/users.info?token=${slackToken}&user=${req.body.user_id}`)
     let user = data.body.user
     console.log(user.real_name + " rang from slack")
-    io.emit("ring bell", { name: user.real_name, icon: user.profile.image_24 });
+    io.emit("ring", { name: user.real_name, icon: user.profile.image_24 });
     res.send({
         "response_type": "in_channel",
         "text": `${user.real_name} rang the doorbell!`
@@ -48,7 +48,7 @@ app.use(function(req, res) {
 
 io.on("connection", function(socket) {
     socket.on('ring', function({ name }){
-        io.emit("ring bell", { name });
+        io.emit("ring", { name });
         console.log(`${name} rang`);
     });
 });

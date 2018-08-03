@@ -104,7 +104,7 @@ var toggleBellMode = function() {
     let bellModeToggle = document.getElementById("bellModeToggle");
     bellMode = bellModeToggle.checked;
     setCookie("bellMode", bellMode);
-    document.getElementById("lastRang").style.display = bellMode ? "block" : "none";
+    setVisibleEl("#lastRang", bellMode);
 
     if (bellMode && Notification && Notification.permission !== "granted") {
         Notification.requestPermission();
@@ -156,6 +156,11 @@ window.onload = function() {
     if (bellMode && Notification && Notification.permission !== "granted") {
         Notification.requestPermission();
     }
+    if (!bellMode) {
+        setVisibleEl("#lastRang", false)
+    } else {
+        setVisibleEl("#lastRang", true);
+    }
 
     var name = getCookie("person_name");
     if (name) {
@@ -169,7 +174,7 @@ window.onload = function() {
     }
 }
 
-socket.on("ring bell", emitRing);
+socket.on("ring", emitRing);
 socket.on("reload", options => {
     options = options || {}
     if (options.onlyListeners) {
