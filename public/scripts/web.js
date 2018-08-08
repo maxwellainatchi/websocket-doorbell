@@ -143,7 +143,7 @@ function passClickToChild(el) {
     let children = el.children;
     for (let c in children) {
         if (!children[c].classList.contains("hidden")) {
-            children[c].click();
+            eval(children[c].getAttribute("parentclick"));
             return;
         }
     }
@@ -161,6 +161,10 @@ window.onload = function() {
     } else {
         setVisibleEl("#lastRang", true);
     }
+
+    document.querySelector("#overlay").childNodes.forEach(el => {
+        el.onclick = e => e.stopPropagation();
+    })
 
     var name = getCookie("person_name");
     if (name) {

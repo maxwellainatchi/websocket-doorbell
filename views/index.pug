@@ -25,7 +25,7 @@ body
         #loadingOverlay.container.full-size(style="justify-content: center; align-items: center;")
             +spinner
         form#nameOverlay.padded.guttered.centered.container.container--column.hidden(
-            style="justify-content: center" onsubmit="addName(); return false" onclick="addName()"
+            style="justify-content: center" onsubmit="addName(); return false" parentclick="addName();"
         )
             label(for="nameInput") Enta name heeere:
             input#nameInput.prettyInput.spaced(name="nameInput" type="text", placeholder="name.")
