@@ -11,6 +11,8 @@ let reloadPassword = process.env.RELOAD_PASSWORD;
 app.use(Express.static(__dirname + "/public"));
 app.set('view engine', "pug");
 
+/* Test comment, hi alex! */
+
 app.use((req, res, next) => {
     let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     console.log(`HTTP ${req.httpVersion} ${req.method} ${req.originalUrl} from ${ip}`);
